@@ -1,0 +1,65 @@
+# GG-Agentic-Harness-Foundry 코어 아키텍처 설계서
+
+## 목적
+
+본 설계서는 단순한 에이전트 생성 도구를 넘어, 자율 수정, 상태 영구 보존, 에러 자가 치유 능력을 갖춘 **Agentic OS(운영 체제) 파운드리**의 작동 원리와 4-Layer 아키텍처를 정의합니다.
+실행은 타겟 AI 플랫폼(Gemini, Claude, OpenAI) 환경에 맞춰 동적으로 라우팅되며, 메인 오케스트레이터가 자율 루프(FGM)를 통해 작업의 시작과 끝을 안전하게 제어합니다.
+
+## 설계 원칙
+
+1. **Multi-Platform Portability (멀티 플랫폼 호환성)**: 엔진의 논리(Skills/Agents)는 유지하되, 플랫폼별 고유의 네임스페이스(`.gemini/`, `.claude/`, `.openai/`) 및 메타데이터 형식에 맞춰 동적 배포한다.
+2. **Layered Extension (레이어 확장성)**: 4개의 명확한 레이어(UI, Runtime, Governance, Base)를 통해 시스템 결합도를 낮추고 각 요소가 유기적으로 연동되게 한다.
+3. **File-First Persistence (파일 우선 지속성)**: 모든 체크포인트, 오류 패턴, 앵커 상태는 마크다운(`.md`) 및 `.json`으로 워크스페이스 내에 저장되어 메모리 휘발성 및 컨텍스트 리셋을 회피한다.
+4. **Approval vs Automation (필수 승인과 완전 자동화 분리)**: 아키텍처 변경, 복구 시작 등 중대한 개입 지점은 사용자의 명시적 승인을 받되, 컨텍스트 압축, 에이전트 간 역할 인계, 백그라운드 상태 백업(Git) 등은 시스템이 알아서 자동화하여 피로도를 줄인다.
+
+## 핵심 구조 (4-Layer 및 6대 거버넌스 시스템)
+
+- **`00_purpose_anchor.md` (ICIP)**: 작업의 최종 목표를 고정하는 앵커. 서브 에이전트들이 곁길로 새지 않도록 평가 게이트 역할을 수행한다.
+- **`checkpoint.json` (CRP)**: 현재 진행 중인 Phase, Step, 완료된 에이전트 목록을 영구 저장한다.
+- **`.git` (CRP Git Snapshot)**: 상태가 저장될 때마다 로컬 버전 스냅샷을 백그라운드로 커밋하여 데이터 유실 시 안전한 롤백 지점을 제공한다.
+- **`goal_status.md` (FGM)**: `/goal` 자율 주행 시, 이터레이션 현황, 에러 상태, 차단 요인(Blocker)을 실시간으로 표시하는 모니터링판.
+- **`SKILL.md`**: 도메인별 오케스트레이터의 행동 규칙과 워크플로우를 관장하는 메인 지휘소.
+- **EPR & REE**: 오류 패턴 레지스트리 및 마크다운 기반 MUST 규칙 검증기. 에이전트 프롬프트에 주입되어 작업 전/후 필터링을 수행한다.
+- **TCM (Tiered Context Management)**: 컨텍스트 누적이 30%, 50%를 초과하면 자동으로 이전 대화를 압축 및 요약하는 시스템 모듈.
+
+## 운영 절차
+
+### 1. 작업 스캐폴딩 및 시작 (Initialization)
+1. **의도 분석**: Intent Engine이 사용자의 도메인(예: 주식 분석, 소설 작성 등)을 파악하고 최적의 템플릿(harness-100)을 식별.
+2. **가변 배포**: Harness Scaffolder가 지정된 타겟 플랫폼으로 에이전트 팀과 6대 시스템 로직을 폴더 구조와 함께 복제.
+3. **베이스라인 보호**: 템플릿 배포가 완료되면 로컬 `.git`을 생성(`git init`)하고 첫 스냅샷 커밋 생성.
+
+### 2. 자율 루프 실행 (Execution via FGM)
+1. 메인 오케스트레이터가 `00_purpose_anchor.md`를 로드하고, `goal_status.md`를 갱신하며 에이전트를 하나씩 호출.
+2. 각 서브 에이전트는 **EPR(에러 패턴 회피)**과 **REE(규칙 준수)** 프롬프트 제약을 받으며 산출물 생성.
+3. 오케스트레이터가 **ICIP(목적 적합성)** 게이트로 산출물 통과 여부 평가. (실패 시 피드백과 함께 재실행)
+
+### 3. 상태 저장 및 메모리 압축 (Persistence)
+1. 각 Phase가 완료되거나, 루프 반복 횟수(max_iterations)가 갱신될 때마다 **CRP**가 `checkpoint.json`을 덮어씀.
+2. 상태 저장 직후 로컬 `.git` 저장소에 `git commit`이 자동 발생하여 복원 지점 마련.
+3. 턴이 길어질 경우 **TCM**이 개입하여 Soft/Hard Compaction(컨텍스트 압축)을 자동 실행하여 에이전트 기억상실증(Amnesia) 방지.
+
+### 4. 작업 중단 및 재개 (Resumption & Rollback)
+1. **정상 재개**: 작업이 끊기더라도, 재호출 시 `checkpoint.json`을 읽고 남은 작업자부터 다시 배차.
+2. **치명적 오류 복구**: 파일 오염 또는 잘못된 덮어쓰기 발생 시, 사용자가 `git reset --hard`로 이전 정상 체크포인트로 시공간을 복원.
+
+## 파일 구조 도식 (플랫폼 가변 모델)
+
+```
+target-workspace/
+  ├── .gemini/ (또는 .claude/ 또는 .openai/)
+  │     ├── GEMINI.md               # 플랫폼 명세 메타데이터
+  │     ├── agents/
+  │     │     ├── agent-1.md        # Governance 주입된 에이전트 프롬프트
+  │     │     └── agent-2.md
+  │     └── skills/
+  │           └── main-orchestrator/
+  │                 └── SKILL.md    # 6대 시스템 믹스인 메인 지휘소
+  ├── .git/                         # CRP 자동 스냅샷 로컬 저장소
+  └── _workspace/                   # 런타임 데이터 영구 저장소
+        ├── 00_purpose_anchor.md
+        ├── checkpoint.json
+        ├── goal_status.md
+        ├── artifacts/              # 산출물
+        └── scratch/
+```

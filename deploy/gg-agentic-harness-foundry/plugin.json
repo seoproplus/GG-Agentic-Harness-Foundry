@@ -1,0 +1,5 @@
+{
+  "name": "gg-agentic-harness-foundry",
+  "version": "1.5.0",
+  "description": "GG-Agentic-Harness-Foundry — 멀티 플랫폼(Gemini, Claude Code, ChatGPT/Codex) 통합 설치 및 스캐폴더, 6대 핵심 운영 시스템(ICIP, CRP, TCM, EPR, REE, Intent, FGM)을 탑재한 개인 Agentic OS 구축 파운드리."
+}
