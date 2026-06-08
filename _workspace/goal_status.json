@@ -1,0 +1,23 @@
+{
+  "goal_description": "최신 하네스 시스템 및 프레임워크 리서치 및 GG-Agentic-Harness-Foundry 비교 분석",
+  "status": "COMPLETED",
+  "iterations": 1,
+  "max_iterations": 10,
+  "tasks": [
+    {
+      "id": "T1",
+      "description": "Threads 포스트 및 최근 2개월 에이전트 동향 리서치",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "T2",
+      "description": "Implementation Plan 작성 및 사용자 승인 대기",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "T3",
+      "description": "비교 분석 리포트(Artifact) 작성",
+      "status": "COMPLETED"
+    }
+  ]
+}

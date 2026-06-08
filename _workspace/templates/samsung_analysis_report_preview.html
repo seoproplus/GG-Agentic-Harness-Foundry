@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>기업 분석 보고서 - Samsung DI 5.0</title>
+  <style>
+    /* Samsung DI 5.0 Tokens */
+    :root {
+      --di-white: #FFFFFF;
+      --di-black: #111111;
+      --di-blue-essential: #1428A0;
+      --di-tint-harmonious: #F5F7FA;
+      --di-grey-text: #666666;
+      --di-green-ok: #00A651;
+      --di-red-warn: #E53935;
+      
+      font-family: "SamsungOne Sans", "SamsungOne", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    /* Essential Canvas */
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--di-white);
+      color: var(--di-black);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.7;
+    }
+
+    .essential-canvas {
+      max-width: 900px; /* PC에서는 넓은 여백을 위해 900px */
+      margin: 0 auto;
+      padding: 80px 32px 120px 32px;
+      background: var(--di-white);
+      position: relative;
+    }
+
+    /* Harmonious Visual Elements */
+    .harmonious-gradient {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 400px;
+      background: linear-gradient(180deg, rgba(20, 40, 160, 0.03) 0%, rgba(255, 255, 255, 0) 100%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Hero Section (Essential) */
+    .hero-section {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 80px;
+    }
+
+    .hero-label {
+      display: inline-block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--di-blue-essential);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      border-bottom: 2px solid var(--di-blue-essential);
+      padding-bottom: 4px;
+    }
+
+    .display-hero {
+      font-size: 64px;
+      font-weight: 700;
+      line-height: 1.1;
+      margin: 0 0 24px 0;
+      letter-spacing: -1.5px;
+    }
+
+    .hero-desc {
+      font-size: 20px;
+      font-weight: 300;
+      color: var(--di-grey-text);
+      max-width: 600px;
+      margin: 0;
+    }
+
+    /* Innovative Typography Grid (No Cards) */
+    .innovative-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 60px;
+      margin-bottom: 80px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    @media (min-width: 768px) {
+      .innovative-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 40px;
+      }
+    }
+
+    .data-point {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .data-label {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--di-grey-text);
+      margin-bottom: 8px;
+    }
+
+    .data-value {
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--di-black);
+      line-height: 1;
+      margin-bottom: 16px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .data-value.positive { color: var(--di-green-ok); }
+    .data-value.negative { color: var(--di-red-warn); }
+
+    .data-desc {
+      font-size: 14px;
+      color: var(--di-grey-text);
+      line-height: 1.6;
+    }
+
+    /* Editorial Content (Harmonious & Essential) */
+    .editorial-section {
+      margin-bottom: 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .title-innov {
+      font-size: 32px;
+      font-weight: 600;
+      margin: 0 0 32px 0;
+      letter-spacing: -0.5px;
+    }
+
+    .body-harm {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--di-black);
+      max-width: 720px;
+      margin-bottom: 32px;
+    }
+
+    /* Harmonious Visual Component (Organic Shape) */
+    .organic-image-container {
+      width: 100%;
+      height: 300px;
+      background: var(--di-tint-harmonious);
+      border-radius: 40px 120px 40px 40px; /* 유기적인 형태 */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+      overflow: hidden;
+    }
+    .organic-text {
+      font-size: 24px;
+      font-weight: 300;
+      color: var(--di-blue-essential);
+      letter-spacing: 2px;
+    }
+
+    /* Purposeful CTA */
+    .purposeful-cta-wrapper {
+      margin-top: 80px;
+      text-align: left;
+    }
+
+    .purposeful-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 48px;
+      background: var(--di-blue-essential);
+      color: var(--di-white);
+      font-size: 18px;
+      font-weight: 600;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    }
+    .purposeful-cta:hover {
+      opacity: 0.9;
+    }
+
+    /* Subtle divider */
+    .essential-divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(0,0,0,0.05);
+      margin: 60px 0;
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- Harmonious Gradient Background -->
+<div class="harmonious-gradient"></div>
+
+<div class="essential-canvas">
+  
+  <!-- Hero Section: 군더더기 없는 본질(Essential) -->
+  <div class="hero-section">
+    <div class="hero-label">Corporate Analysis</div>
+    <h1 class="display-hero">ASML Holding N.V.</h1>
+    <p class="hero-desc">
+      극자외선(EUV) 노광 장비 시장의 독보적 지배자. 
+      기술의 혁신이 어떻게 산업의 패러다임을 이끄는지에 대한 심층 분석입니다.
+    </p>
+  </div>
+
+  <!-- Innovative Typography Grid: 표와 카드를 배제한 혁신적 데이터 표현 -->
+  <div class="innovative-grid">
+    <div class="data-point">
+      <span class="data-label">Q3 Revenue</span>
+      <span class="data-value">€5.29B</span>
+      <span class="data-desc">전년 동기 대비 조정된 수치이나, 차세대 장비의 예약 대기율은 여전히 견고합니다.</span>
+    </div>
+    
+    <div class="data-point">
+      <span class="data-label">Operating Margin</span>
+      <span class="data-value positive">31.5%</span>
+      <span class="data-desc">연구개발(R&D) 투자를 대폭 확대함에도 불구하고, 30% 이상의 경이로운 마진을 방어했습니다.</span>
+    </div>
+
+    <div class="data-point">
+      <span class="data-label">Market Share (EUV)</span>
+      <span class="data-value">100%</span>
+      <span class="data-desc">대체 불가능한 본질적 가치. 최첨단 반도체 제조에 필수적인 인프라를 독점 공급합니다.</span>
+    </div>
+  </div>
+
+  <div class="essential-divider"></div>
+
+  <!-- Harmonious Visual & Editorial -->
+  <div class="editorial-section">
+    <h2 class="title-innov">조화로운 파트너십 생태계</h2>
+    
+    <div class="organic-image-container">
+      <!-- 실제 이미지 대신 타이포그래피 플레이스로 대체 -->
+      <span class="organic-text">Beyond the Limits</span>
+    </div>
+
+    <p class="body-harm">
+      ASML의 진정한 경쟁력은 단순히 기계를 만드는 것에 그치지 않습니다. 고객사, 부품 공급사, 연구 기관들이 거대한 생태계를 이루며 <strong>서로 상호 작용하는 조화(Harmonious)</strong>를 바탕으로 기술의 임계점을 돌파하고 있습니다.
+    </p>
+    <p class="body-harm">
+      단기적인 지정학적 리스크나 수출 규제가 존재하나, 기술의 한계를 넓혀가는 인간의 본질적 요구가 지속되는 한, 이들의 펀더멘털은 견고하게 유지될 것입니다.
+    </p>
+  </div>
+
+  <!-- Purposeful CTA -->
+  <div class="purposeful-cta-wrapper">
+    <button class="purposeful-cta">전체 분석 보고서 확인하기</button>
+  </div>
+
+</div>
+
+</body>
+</html>

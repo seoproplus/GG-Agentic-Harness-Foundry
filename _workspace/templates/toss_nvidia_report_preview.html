@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NVIDIA (NVDA) 투자 분석 리포트 - Toss Design</title>
+  <style>
+    /* Toss Design System Tokens */
+    :root {
+      --tds-brand-blue: #3182F6;
+      --tds-brand-blue-weak: #E8F3FF;
+      --tds-grey-900: #191F28;
+      --tds-grey-800: #333D4B;
+      --tds-grey-700: #4E5968;
+      --tds-grey-400: #B0B8C1;
+      --tds-grey-200: #E5E8EB;
+      --tds-grey-100: #F2F4F6;
+      --tds-white: #FFFFFF;
+      --tds-red: #F04452;
+      --tds-red-weak: #FDE8E9;
+      --tds-green: #04C065;
+      
+      --tds-radius-m: 12px;
+      --tds-radius-xl: 16px;
+      --tds-radius-2xl: 20px;
+      --tds-radius-full: 999px;
+      
+      font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--tds-white);
+      color: var(--tds-grey-900);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Responsive Container (PC & Mobile) */
+    .app-container {
+      max-width: 768px; /* 태블릿/PC에서 보기 좋은 최대 너비 */
+      margin: 0 auto;
+      background: var(--tds-white);
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* TopBar Component */
+    .top-bar {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      font-size: 17px;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      z-index: 10;
+      border-bottom: 1px solid var(--tds-grey-200);
+    }
+    .back-btn { margin-right: 16px; cursor: pointer; }
+
+    /* Content Area */
+    .content {
+      padding: 32px 24px 100px 24px; /* 하단 100px은 BottomCTA 영역 보장 */
+    }
+
+    /* Header Section */
+    .header-section { margin-bottom: 40px; }
+    .company-logo {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--tds-radius-full);
+      background: #76B900; /* Nvidia Green */
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+    .title-1 { font-size: 24px; font-weight: 700; margin: 0 0 8px 0; }
+    .display-1 { font-size: 48px; font-weight: 700; margin: 0 0 8px 0; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+    .body-1 { font-size: 17px; font-weight: 400; line-height: 1.5; color: var(--tds-grey-700); margin: 0; }
+    .text-success { color: var(--tds-red); font-weight: 600; } /* 한국 주식 붉은색 상승 표기 차용, 글로벌은 초록색 */
+
+    /* Section Component */
+    .section { margin-bottom: 48px; }
+    .section-title { font-size: 20px; font-weight: 700; margin: 0 0 20px 0; }
+
+    /* Card Component */
+    .card {
+      background: var(--tds-grey-100);
+      border-radius: var(--tds-radius-2xl);
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .card-title { font-size: 17px; font-weight: 600; margin: 0 0 12px 0; display: flex; align-items: center; }
+    .card-body { color: var(--tds-grey-800); font-size: 15px; line-height: 1.6; margin: 0; }
+    
+    /* Badges */
+    .badge {
+      padding: 4px 10px;
+      border-radius: var(--tds-radius-m);
+      font-size: 13px;
+      font-weight: 700;
+      margin-right: 8px;
+    }
+    .badge-buy { background: var(--tds-red-weak); color: var(--tds-red); }
+    .badge-ai { background: var(--tds-brand-blue-weak); color: var(--tds-brand-blue); }
+
+    /* ListRow Component for Financials */
+    .list-row {
+      display: flex;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--tds-grey-200);
+    }
+    .list-row:last-child { border-bottom: none; }
+    .list-title { flex: 1; font-size: 17px; font-weight: 600; }
+    .list-value { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; text-align: right; }
+    .list-subtitle { font-size: 13px; color: var(--tds-grey-700); margin-top: 4px; }
+
+    /* BottomCTA Component */
+    .bottom-cta-container {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 768px;
+      padding: 16px 24px 32px 24px;
+      box-sizing: border-box;
+      background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 30%, rgba(255,255,255,1) 100%);
+      z-index: 100;
+    }
+    .bottom-cta {
+      background: var(--tds-brand-blue);
+      color: var(--tds-white);
+      height: 56px;
+      border-radius: var(--tds-radius-xl);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      font-weight: 700;
+      width: 100%;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(49, 130, 246, 0.2);
+    }
+
+    /* Desktop Adjustments */
+    @media (min-width: 768px) {
+      body { background-color: var(--tds-grey-100); }
+      .app-container {
+        margin: 40px auto;
+        border-radius: 32px;
+        box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+        overflow: hidden;
+        min-height: auto;
+      }
+      .bottom-cta-container {
+        position: absolute;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  
+  <div class="top-bar">
+    <div class="back-btn">←</div>
+    종목 분석 리포트
+  </div>
+
+  <div class="content">
+    
+    <!-- Hero Section -->
+    <div class="header-section">
+      <div class="company-logo">N</div>
+      <h1 class="title-1">엔비디아 (NVDA)</h1>
+      <div class="display-1">$135.58</div>
+      <p class="body-1 text-success">+3.42 (+2.58%)</p>
+    </div>
+
+    <!-- Rating Section -->
+    <div class="section">
+      <h2 class="section-title">AI 애널리스트 종합 의견</h2>
+      <div class="card" style="background: var(--tds-white); border: 1px solid var(--tds-grey-200);">
+        <div class="card-title">
+          <span class="badge badge-buy">STRONG BUY</span>
+          목표가 $150.00
+        </div>
+        <p class="card-body">
+          차세대 Blackwell 아키텍처 수요가 폭발적으로 증가하고 있어요.<br>
+          단기 급등에 따른 피로도가 존재하지만, 데이터센터 매출 성장이 이를 압도할 것으로 전망해요.
+        </p>
+      </div>
+    </div>
+
+    <!-- Investment Thesis (Cards) -->
+    <div class="section">
+      <h2 class="section-title">주요 투자 포인트</h2>
+      
+      <div class="card">
+        <div class="card-title">
+          <span class="badge badge-ai">포인트 1</span>
+          압도적인 데이터센터 매출
+        </div>
+        <p class="card-body">
+          글로벌 빅테크 기업들의 AI 인프라 투자가 둔화될 조짐이 보이지 않아요. 3분기 데이터센터 부문 매출은 전년 동기 대비 150% 이상 성장했어요.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span class="badge badge-ai">포인트 2</span>
+          Blackwell 칩 양산 본격화
+        </div>
+        <p class="card-body">
+          기존 Hopper(H100) 대비 학습/추론 성능이 비약적으로 향상된 차세대 칩 양산이 시작되었어요. 대기 수요만으로도 내년 상반기 물량이 완판된 상태예요.
+        </p>
+      </div>
+    </div>
+
+    <!-- Financial Grid (ListRows) -->
+    <div class="section">
+      <h2 class="section-title">핵심 재무 지표</h2>
+      
+      <div class="list-row">
+        <div class="list-title">
+          매출액 (Q3)
+          <div class="list-subtitle">YoY +122%</div>
+        </div>
+        <div class="list-value">$30.04B</div>
+      </div>
+      
+      <div class="list-row">
+        <div class="list-title">
+          영업이익률
+          <div class="list-subtitle">업계 최고 수준</div>
+        </div>
+        <div class="list-value">62.3%</div>
+      </div>
+
+      <div class="list-row">
+        <div class="list-title">
+          선행 P/E
+          <div class="list-subtitle">실적 상향으로 밸류에이션 안정화</div>
+        </div>
+        <div class="list-value">35.2x</div>
+      </div>
+    </div>
+
+    <!-- Risk Factors -->
+    <div class="section">
+      <h2 class="section-title">투자에 참고하세요 (리스크)</h2>
+      <div class="card" style="background: var(--tds-grey-100);">
+        <p class="card-body">
+          • 중국 수출 규제로 인한 매출 타격 가능성이 상존해요.<br>
+          • AMD 등 경쟁사의 AI 가속기 추격이 거세지고 있어요.
+        </p>
+      </div>
+    </div>
+
+  </div> <!-- content end -->
+
+  <!-- Bottom CTA Fixed on Mobile, Absolute on Desktop wrapper -->
+  <div class="bottom-cta-container">
+    <button class="bottom-cta">엔비디아 (NVDA) 매수하기</button>
+  </div>
+
+</div>
+
+</body>
+</html>
