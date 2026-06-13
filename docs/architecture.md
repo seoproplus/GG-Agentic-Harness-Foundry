@@ -15,14 +15,14 @@
 │              Layer 4: User Interface                     │
 │                                                         │
 │  ┌─────────────────────────┐   ┌─────────────────────┐  │
-│  │   Intent Engine         │   │ Foundry Version &   │  │
-│  │  · 자연어 → Intent 객체  │   │ Compatibility Tool  │  │
-│  │  · 직업군 아키타입 매핑 │   │  · v1.5.0 관리      │  │
-│  │  · 사용자 프로파일 참조  │   │  · Gemini 업데이트  │  │
-│  │  · 시스템 활성화 추천   │   │    호환 대응 안내   │  │
+│  │      intent-engine      │   │    foundry-info     │  │
+│  │  · 자연어 → Intent 객체  │   │  · v1.5.0 관리      │  │
+│  │  · 직업군 아키타입 매핑 │   │  · Gemini 업데이트  │  │
+│  │  · 사용자 프로파일 참조  │   │    호환 대응 안내   │  │
+│  │  · 시스템 활성화 추천   │   │                     │  │
 │  └─────────────────────────┘   └─────────────────────┘  │
 │  ┌───────────────────────────────────────────────────┐  │
-│  │                Harness Scaffolder                 │  │
+│  │                harness-scaffolder                 │  │
 │  │   · harness-100 베스트 프랙티스 템플릿 연동       │  │
 │  │   · 사용자 지정 프로젝트 루트 및 하위 구조 매핑     │  │
 │  │   · 배포 전 계획서 출력 및 유저 선 승인제 (v1.5.0)   │  │
@@ -69,7 +69,7 @@
 ## 시스템 간 연동 맵
 
 ```
-                    Intent Engine
+                    intent-engine
                           │
                     ┌────┴────┐
                     ▼         ▼
@@ -96,10 +96,10 @@
 
 | 소스 → 타겟 | 연동 내용 |
 |------------|----------|
-| **Intent → harness-scaffolder** | 구조화된 Intent Object와 사용자 지정 프로젝트 루트 경로를 스캐폴더에 전달 |
+| **intent-engine → harness-scaffolder** | 구조화된 Intent Object와 사용자 지정 프로젝트 루트 경로를 스캐폴더에 전달 |
 | **harness-scaffolder → User** | 파일 생성 전 "스캐폴딩 계획 보고서"를 띄우고 명시적 승인 확인 (v1.5.0) |
 | **harness-scaffolder → L2/L3 Layers** | 에이전트에 EPR/REE 사전 경고 주입, 오케스트레이터에 ICIP/CRP/TCM/REE 감사/FGM 루프 주입 |
-| **Intent → ICIP/CRP/TCM/EPR/REE** | 시스템 활성화 결정 |
+| **intent-engine → ICIP/CRP/TCM/EPR/REE** | 시스템 활성화 결정 |
 | **ICIP → CRP** | 목적 앵커 경로를 checkpoint에 등록 |
 | **ICIP → TCM** | 목적 앵커를 Tier 1 불변 영역에 배치 |
 | **CRP → TCM** | Compaction 발생 시 compaction_count 증가 |

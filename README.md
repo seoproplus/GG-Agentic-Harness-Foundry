@@ -91,15 +91,26 @@ flowchart TD
 ## 🚀 설치 및 확인 방법
 
 ### 1. 환경 구성
-Windows PowerShell 환경에서 제공된 설치 스크립트를 실행하여 프로젝트를 초기화합니다.
-```powershell
-.\install.ps1
-```
+Windows PowerShell 환경에서 제공된 설치 스크립트를 실행하여 파운드리를 대상 플랫폼(Gemini, Claude, OpenAI)에 배포합니다.
+
+- **전역(Global) 설치**: 내 PC의 모든 프로젝트에서 사용할 경우
+  ```powershell
+  .\install.ps1
+  ```
+- **로컬(Project) 설치**: 특정 프로젝트 폴더 내부에만 종속시켜 사용할 경우
+  ```powershell
+  .\install-local.ps1
+  ```
+
+### 1-1. 복구 및 롤백 (Rollback)
+설치 과정에서 덮어쓰기를 방지하기 위해 생성된 `백업본`으로 시스템을 원상복구할 수 있습니다. 롤백 시 현재 문제가 있는 설치본은 `_corrupted_...`로 안전하게 격리됩니다.
+- **전역 복구**: `.\restore.ps1`
+- **로컬 복구**: `.\restore-local.ps1`
 
 ### 2. 버전 및 정보 확인
 현재 설치된 파운드리의 구성 사양과 버전(`v1.5.0`), Gemini 엔진 최적화 정보를 보려면 터미널에서 아래 스크립트를 실행합니다.
 ```powershell
-python ./systems/foundry_info.py
+python ./systems/foundry-info/foundry_info.py
 ```
 
 ### 3. Agentic Commands
