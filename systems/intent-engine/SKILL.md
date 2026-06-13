@@ -36,7 +36,7 @@ description: "Intent Classification Engine — 사용자의 모호한 요청을 
     "constraints": ["{시간/범위/기술 제약}"]
   },
   "profile": {
-    "archetype": "researcher | developer | planner | designer",
+    "archetype": "researcher | developer | code-reviewer | test-engineer | security-auditor | planner | designer",
     "expertise_level": "beginner | intermediate | advanced | expert",
     "preferred_patterns": ["{과거에 선호한 아키텍처 패턴}"],
     "communication_style": "concise | detailed | visual"
@@ -45,7 +45,7 @@ description: "Intent Classification Engine — 사용자의 모호한 요청을 
     "architecture_pattern": "{추천 패턴}",
     "agent_count": "{추천 에이전트 수}",
     "estimated_complexity": "low | medium | high | very_high",
-    "systems_to_activate": ["ICIP", "CRP", "TCM", "EPR", "REE"]
+    "systems_to_activate": ["ICIP", "CRP", "TCM", "EPR", "REE", "FGM"]
   }
 }
 ```
@@ -95,18 +95,25 @@ description: "Intent Classification Engine — 사용자의 모호한 요청을 
 - 항상 한국어 보고서를 요청 → language를 'ko'로 기본값
 - 항상 TL;DR을 먼저 확인 → communication_style을 'concise'
 
-### Phase 4: 직업군 아키타입 매핑
+### Phase 4: 직업군 아키타입(페르소나) 매핑
 
-| 아키타입 | 특성 | 기본 패턴 | 기본 시스템 |
-|---------|------|----------|-----------|
+단순한 제너럴 아키타입 외에도, Addy Osmani의 `agent-skills` 원칙에 기반하여 특정 SDLC 단계에 특화된 **전문가 페르소나**를 정밀하게 식별한다.
+
+| 아키타입 / 페르소나 | 특성 | 기본 패턴 | 기본 시스템 |
+|-----------------|------|----------|-----------|
 | **Researcher** | 깊은 조사, 다각도 분석, 문헌 기반 | Fan-out/Fan-in | ICIP + TCM + CRP |
-| **Developer** | 코드 생성, 테스트, 배포 | Pipeline + Producer-Reviewer | CRP + REE |
+| **Developer** | 범용 코드 생성, 기능 구현 | Pipeline | CRP + REE |
+| **Code-Reviewer** | (SDLC: Review) 스태프 엔지니어 관점, 5축 코드 리뷰 | Reviewer | ICIP + REE + EPR |
+| **Test-Engineer** | (SDLC: Test) QA 전문가 관점, 테스트 커버리지 및 증거 확보 | Producer-Reviewer | ICIP + REE + EPR |
+| **Security-Auditor** | (SDLC: Review) 보안 엔지니어 관점, OWASP 및 취약점 탐지 | Reviewer | ICIP + REE + EPR |
 | **Planner** | 전략 수립, 의사결정, 로드맵 | Supervisor | ICIP + REE |
 | **Designer** | 창작, 시각화, 프로토타입 | Producer-Reviewer | CRP |
 
-**아키타입 감지 방법:**
+**아키타입/페르소나 감지 방법:**
 1. 사용자 프로파일에 명시된 경우 → 직접 사용
-2. 요청 키워드에서 추론: "연구"→Researcher, "개발"→Developer, "계획"→Planner, "디자인"→Designer
+2. 요청 키워드에서 추론: 
+   - 일반: "연구"→Researcher, "개발"→Developer, "계획"→Planner, "디자인"→Designer
+   - SDLC 특화: "코드 리뷰"→Code-Reviewer, "테스트 코드", "QA"→Test-Engineer, "보안", "취약점"→Security-Auditor
 3. 과거 작업 패턴에서 가장 빈번한 유형 → 기본값
 
 ### Phase 5: 하네스 구성 추천

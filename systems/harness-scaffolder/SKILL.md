@@ -15,7 +15,7 @@ description: "AI 기반 동적 하네스(에이전트+스킬) 생성 스킬. 사
 0. **[필수] 스캐폴딩 개선 가이드라인 로드**: 작업을 시작하기 전, 반드시 [harness-100-improvements.md](file:///c:/Users/themo/Documents/03_AI_WORKSPACE/GG-Agentic-OS-Harness/scratch/harness-100-improvements.md)를 읽고 여기에 누적 수록된 개선 지침(플랫폼 독립적 배포, 다자간 환류 루프 믹스인, 공백 경로 쿼트 처리)을 가져와 이번 스캐폴딩 구조 설계 시 강제 적용합니다.
 1. **의도 및 도메인 분석**: 사용자의 자연어 요청에서 핵심 도메인 키워드(예: "재고관리 웹앱" -> `webapp`, `database`, `api`)를 도출하고 `harness-100` 라이브러리에서 매칭할 폴더(예: `16-fullstack-webapp`)를 식별합니다.
 2. **프로젝트 루트 경로 식별**: 사용자가 요청에 포함한 **프로젝트 루트 경로**(예: `C:\Projects\MyScrapApp`)를 추출합니다. 경로가 주어지지 않았다면, 기본값으로 워크스페이스 하위에 사용자 의도에 맞는 프로젝트 폴더(`_workspace/{project-name}`)를 생성하도록 지정합니다.
-3. **베이스라인 정보 로드**: 매칭된 템플릿의 `.claude/agents/` 및 `.claude/skills/` 데이터를 로드합니다.
+3. **베이스라인 정보 로드**: 매칭된 템플릿의 에이전트/스킬 정의 데이터를 로드합니다. (플랫폼 네임스페이스는 Step 4에서 결정되므로 이 단계에서 특정 플랫폼 경로를 참조하지 않습니다)
 4. **타겟 플랫폼 판별 및 네임스페이스 결정**: 사용자의 명시적 플랫폼 지시(예: "Claude용", "Gemini용", "ChatGPT용")를 판별하여 배포 대상 네임스페이스 폴더와 메타데이터 파일명을 다음과 같이 동적 매핑합니다.
    - **Claude**: `.claude/` 폴더 구성 및 `CLAUDE.md` 명세서 생성
    - **Gemini**: `.gemini/` 폴더 구성 및 `GEMINI.md` 명세서 생성 (기본값)
@@ -58,7 +58,8 @@ description: "AI 기반 동적 하네스(에이전트+스킬) 생성 스킬. 사
    - `goal_status.md` 모니터링판 및 `goal_status.json` 상태 메타데이터 생성.
    - `While current_iteration <= max_iterations` 루프 가동.
    - 루프 내에서: 에이전트 실행 -> ICIP 성공 기준 게이트 평가 -> REE Post-flight 규정 준수 감사 실행.
-   - 만족도 100% 충족 시 루프 탈출. 미달 시 실패 보고를 피드백 프롬프트에 동적 주입하고 이터레이션 반복.
+   - **런타임 개입 (Runtime Intervention)**: ICIP 검사 중 `verification_evidence`가 부실하거나 에이전트가 변명을 시도하면, 즉시 EPR 레지스트리의 '합리화 방지 반박 논리(Rebuttal)'를 가져와 피드백 프롬프트 최상단에 꽂아 넣습니다.
+   - 만족도 100% 충족 시 루프 탈출. 미달 시 실패 보고 및 반박 논리를 주입하고 이터레이션 반복.
 4. **TCM Compaction 트리거**: 이터레이션 및 턴 횟수 누적에 따른 Soft(30%), Hard(50%) Compaction 기동.
 5. **CRP 체크포인트**: 각 루프/Phase 완료 시 상태 메타데이터를 `checkpoint.json`에 영구 기록.
 
@@ -93,3 +94,12 @@ description: "AI 기반 동적 하네스(에이전트+스킬) 생성 스킬. 사
 2. 본 스킬 문서에 기술된 개선 주입(Injection) 가이드를 따라 에이전트 및 오케스트레이터를 작성하고,
 3. 사용자가 지정한 폴더에 `write_to_file` 도구를 활용해 소스 파일들을 완전 배포한 후,
 4. 배포 완료 내용과 구동 명령어 가이드를 사용자에게 깔끔하게 브리핑하십시오.
+
+## Agent-First CLI Synergy: SDLC Commands & Expert Personas
+Addy Osmani의 `agent-skills` 원칙에 따라, 스캐폴딩 생성 시 제너럴한 에이전트 대신 **단계별 특화 페르소나**와 **표준화된 SDLC 커맨드**를 기본 내장하여 배포한다.
+
+### SDLC 7대 슬래시 커맨드 프리셋
+스캐폴딩되는 오케스트레이터는 소프트웨어 개발 생명주기를 커버하는 7가지 핵심 트리거 명령어(`/spec`, `/plan`, `/build`, `/test`, `/review`, `/code-simplify`, `/ship`)를 네이티브 수준으로 인식하도록 초기 설계된다.
+
+### 특화된 전문가 페르소나 주입
+단순한 코드 작성기(Coder)를 넘어서, 특정 단계에서만 깨어나는 강경한 전문가 페르소나(예: `code-reviewer` - 스태프 엔지니어 관점, `test-engineer` - QA 전문가 관점, `security-auditor` - 보안 엔지니어 관점)를 서브에이전트 템플릿으로 사전 구성하여 배포한다.

@@ -54,7 +54,7 @@ description: "GG-Agentic-Harness-Foundry의 버전 정보, 탑재된 핵심 시�
 
 6. **Intent Engine (Intent Classification Engine)**
    - *목적*: 사용자 의도 해석 및 최적 하네스 스캐폴딩
-   - *핵심*: 자연어 요청을 분류하여 직업군 아키타입(Researcher, Developer, Planner, Designer) 매핑 및 템플릿 생성
+   - *핵심*: 자연어 요청을 분류하여 직업군 아키타입(Researcher, Developer, Code-Reviewer, Test-Engineer, Security-Auditor, Planner, Designer) 매핑 및 SDLC 특화 페르소나 기반 템플릿 생성
 
 7. **FGM (Foundry Goal Mode) - `/goal` 자율 실행 루프**
    - *목적*: 장시간 무인 구동 및 성공 목표 최종 달성
@@ -83,4 +83,4 @@ python {설치경로}/gg-agentic-harness-foundry/foundry_info.py --version
 ```
 
 ### 에이전트 지침
-사용자가 "이 Foundry의 버전 정보가 어떻게 돼?" 혹은 "탑재된 기능들을 설명해 줘"라고 요청하면, 이 `foundry-info` 스킬 내용 및 `foundry_info.py` 실행 결과를 조합하여 **Gemini 최신 엔진 업데이트에 대응하고 harness-100 연동 스캐폴딩이 가능한 GG-Agentic-Harness-Foundry v1.3.0**의 세부 내용을 정중하고 명확하게 브리핑하십시오.
+사용자가 "이 Foundry의 버전 정보가 어떻게 돼?" 혹은 "탑재된 기능들을 설명해 줘"라고 요청하면, 이 `foundry-info` 스킬 내용 및 `foundry_info.py` 실행 결과를 조합하여 **Gemini 최신 엔진 업데이트에 대응하고 harness-100 연동 스캐폴딩이 가능한 GG-Agentic-Harness-Foundry v1.5.0**의 세부 내용을 정중하고 명확하게 브리핑하십시오.

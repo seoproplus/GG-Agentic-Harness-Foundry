@@ -1,4 +1,4 @@
-# 📋 harness-100 템플릿 스캐폴딩 개선 분석 보고서 (v1.4.0)
+# 📋 harness-100 템플릿 스캐폴딩 개선 분석 보고서 (v1.5.0)
 
 > **작성 주체**: Sub-Agent (Harness Scaffolding Optimization Team)
 > **대상**: GG-Agentic-Harness-Foundry 스캐폴딩 엔진 및 harness-100 템플릿 라이브러리

@@ -12,7 +12,7 @@
 ```markdown
 ---
 name: {domain}-orchestrator
-description: "{도메인} 에이전트 팀을 조율하는 오케스트레이터. 6대 운영 시스템(ICIP/CRP/TCM/EPR/REE/Intent) 통합. {트리거 키워드 나열}."
+description: "{도메인} 에이전트 팀을 조율하는 오케스트레이터. 6대 운영 시스템(ICIP/CRP/TCM/EPR/REE/FGM) 통합. {트리거 키워드 나열}."
 ---
 
 # {Domain} Orchestrator (Enhanced)
@@ -27,6 +27,7 @@ GG-Agentic-Harness-Foundry의 6대 시스템을 내장하여 컨텍스트 보존
 - [x] TCM (컨텍스트 압축)
 - [x] EPR (오류 패턴 사전 조회)
 - [x] REE (규칙 사전/사후 검증)
+- [x] FGM (목표 달성 자율 루프)
 
 ## 에이전트 구성
 
@@ -93,8 +94,8 @@ While current_iteration <= max_iterations (기본값: 10회):
   5. [판정 및 자가 수정]
      - 충족도 100% -> status = SUCCESS 기록, 루프 즉시 완료 및 Phase 4로 진행.
      - 미달 사항 존재 -> Blocker 요인을 수집하여 `goal_status.md` 갱신.
-       - 실패 사유와 EPR의 회피 패턴을 다음 이터레이션의 에이전트 프롬프트에 피드백으로 주입.
-       - current_iteration += 1 및 재시도 실행.
+     - **런타임 개입 (Runtime Intervention)**: ICIP 검사 중 `verification_evidence`가 부실하거나 에이전트가 합리화(변명)를 시도하면, 즉시 EPR 레지스트리의 '합리화 방지 반박 논리(Rebuttal)'를 가져와 다음 이터레이션의 에이전트 피드백 프롬프트 최상단에 주입합니다.
+     - current_iteration += 1 및 재시도 실행.
   6. [안전 장치 (Limit Guard)] 누적 도구 호출 50회 초과 또는 예산 한도 초과 시 즉시 강제 종료 (FAILED).
 ```
 

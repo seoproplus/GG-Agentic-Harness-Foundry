@@ -113,7 +113,7 @@ description: "Checkpoint & Resume Protocol — 작업 중간 기록 및 재개 �
 `/goal` 커맨드로 구동되는 FGM 모드에서는 `checkpoint.json` 내에 `"goal_mode"` 객체가 활성화되며, 다음 규칙에 따라 제어됩니다:
 
 1. **상태 동기화**: 매 이터레이션이 끝날 때마다 `current_iteration`을 증가시키고 `goal_status.md` 마크다운 상태판과 동기화하여 파일에 덮어씁니다.
-2. **에러 피드백 기록**: 에이전트 감사 결과 실패 요인이 발생하면 `last_failure_reason`에 기록하고, 해당 내용을 다음 이터레이션 에이전트 프롬프트 피드백에 주입합니다.
+2. **런타임 개입 및 에러 피드백 기록**: 에이전트가 `verification_evidence`를 누락하거나 합리화(변명)를 시도하여 ICIP/REE 감사에 실패하면, 단순히 실패 사실만 기록하는 것이 아니라 EPR 레지스트리에서 가져온 '강력한 반박 논리(Rebuttal)'를 `last_failure_reason`에 함께 기록합니다. 이 내용은 다음 이터레이션 에이전트 피드백에 '런타임 개입(Runtime Intervention)' 형태로 최우선 주입됩니다.
 3. **루프 임계치 가드**: `current_iteration`이 `max_iterations`를 초과하면 status를 `FAILED`로 기록하고, `goal_status.md`에 최종 차단 원인을 표시한 뒤 자율 루프를 안전 정지합니다.
 
 ## 자동 체크포인트 규칙

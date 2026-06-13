@@ -57,7 +57,7 @@ RFC 2119 기반:
 | 범위 | 적용 | 저장 위치 |
 |------|------|----------|
 | **user** | 이 사용자의 모든 작업 | `.gemini/config/rules/user-rules.md` |
-| **project** | 이 프로젝트에서만 | `{project}/.rules/project-rules.md` |
+| **project** | 이 프로젝트에서만 | `{project}/.rules/project-rules.md` 또는 `{project}/_workspace/R-*.md` (개별 규칙 파일 글로빙) |
 | **global** | 모든 사용자, 모든 프로젝트 | `.gemini/config/rules/global-rules.md` |
 
 ### 카테고리
@@ -232,3 +232,11 @@ EPR에서 3회 이상 발생한 안정 패턴
 - 규칙 파일이 없는 경우: 자동 생성 (빈 파일 + 기본 global 규칙 3개)
 - RULE 마커 파싱 실패: 해당 규칙을 무시하고 경고 출력
 - 모든 MUST 규칙 위반 + 수정 불가: 사용자에게 에스컬레이션
+
+## Agent-First CLI Synergy: Introspectable Schema
+Addy Osmani의 에이전트 설계 원칙에 따라, REE는 정적 규칙 마크다운을 무조건 프롬프트에 구겨 넣는 방식(Human DX)에서 벗어나, 에이전트가 런타임에 직접 스키마를 질의할 수 있는 **동적 조회 엔진(Agent DX)**으로 고도화된다.
+
+### 동적 스키마 조회 (Introspection)
+- **명령어 기반 질의**: 에이전트는 작업 착수 전 `ree query --task="frontend" --output=json` 형태로 필요한 도메인 규칙만 질의할 수 있다.
+- **예측 가능성(Predictability)**: 질의 결과는 자연어가 아닌 기계 판독 가능한 JSON 스키마 규격으로 반환되어 에이전트가 오해 없이 규칙을 준수하도록 강제한다.
+- **토큰 예산 방어**: 전체 글로벌 룰을 로드하지 않으므로 에이전트의 컨텍스트 한계와 토큰 예산을 지켜준다.

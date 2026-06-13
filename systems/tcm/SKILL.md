@@ -164,3 +164,17 @@ Compaction 시 LLM이 "무엇을 남기고 무엇을 버릴지" 판단하면 **�
 - Compaction 후 목적 앵커가 누락된 경우: `_workspace/00_purpose_anchor.md`에서 재로드
 - Compaction 후 현재 Phase를 모르는 경우: `_workspace/checkpoint.json`에서 복원
 - archive 파일이 손상/누락된 경우: checkpoint.json의 summary로 대체 (품질 저하 수용)
+
+## Agent-First CLI Synergy: Field Masking & Progressive Disclosure (점진적 공개)
+Addy Osmani의 에이전트 설계 원칙에 따라, TCM은 정적 파일 텍스트를 무비판적으로 전체 로드하는 것을 지양하고, **동적 스키마 조회 및 Field Masking**을 통해 필요한 JSON 필드나 특정 메타데이터만 로드하여 토큰을 방어한다.
+
+### 점진적 공개 원칙에 따른 Cold Context 설계
+스킬 명세서(`SKILL.md`)만 Hot Context(Tier 1)에 상주시키고, 방대한 체크리스트(예: `security-checklist.md`, `testing-patterns.md`)는 기본적으로 완전히 배제된 Cold Context(Tier 3)로 취급한다. 에이전트가 특정 검증 단계에 돌입했을 때만 `tcm_query`나 Field Masking을 통해 해당 파일의 필요 섹션만 핀포인트로 당겨오게 만들어, 토큰 사용량을 극단적으로 최적화한다.
+
+### Field Mask 쿼리
+거대한 산출물(Artifact)이나 스킬 목록을 로드해야 할 때, 전체 마크다운 텍스트를 로드하지 말고 아래와 같이 Field Mask를 지정하여 필요한 필드만 JSON 형태로 요청한다.
+- **AS-IS (Human DX)**: `view_file("huge_artifact.md")` (전체 텍스트 로드, 토큰 낭비)
+- **TO-BE (Agent DX)**: `tcm_query(target="huge_artifact.md", fields="summary, tldr")` (필요한 속성만 JSON으로 반환받아 컨텍스트에 추가)
+
+### NDJSON Pagination
+목록성 데이터(예: 파일 목록, 스킬 목록)를 읽어올 때 전체 배열을 한 번에 읽는 대신, 각 항목을 개별 JSON(NDJSON) 스트림 형태로 가져와 처리 중 메모리 한계와 컨텍스트 초과를 사전에 차단한다.

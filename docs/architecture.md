@@ -2,9 +2,9 @@
 
 ## 개요
 
-**GG-Agentic-Harness-Foundry**는 [revfactory/harness](https://github.com/revfactory/harness)의 L3 Meta-Factory(팀 아키텍처 팩토리) 위에 6대 운영 레이어를 구축하여, **개인 Agentic OS**를 구현하고 고도화하는 프레임워크 파운드리입니다.
+**GG-Agentic-Harness-Foundry**는 [revfactory/harness](https://github.com/revfactory/harness)의 L3 Meta-Factory(팀 아키텍처 팩토리) 위에 **4-Layer 운영 아키텍처(8대 핵심 시스템)**를 구축하여, **개인 Agentic OS**를 구현하고 고도화하는 프레임워크 파운드리입니다.
 
-이 파운드리는 Gemini의 지속적인 모델 업데이트 및 API 플랫폼 사양 변경에 민첩하게 조응하며, 자체 버전 관리(`foundry-info` 스킬 및 `foundry_info.py` CLI 도구)와 6대 운영 레이어 및 FGM 자율 실행 모드의 최적 정렬 상태를 보장합니다.
+이 파운드리는 Gemini의 지속적인 모델 업데이트 및 API 플랫폼 사양 변경에 민첩하게 조응하며, 자체 버전 관리(`foundry-info` 스킬 및 `foundry_info.py` CLI 도구)와 **8대 운영 시스템** 및 FGM 자율 실행 모드의 최적 정렬 상태를 보장합니다.
 
 ---
 
@@ -17,7 +17,7 @@
 │  ┌─────────────────────────┐   ┌─────────────────────┐  │
 │  │   Intent Engine         │   │ Foundry Version &   │  │
 │  │  · 자연어 → Intent 객체  │   │ Compatibility Tool  │  │
-│  │  · 직업군 아키타입 매핑 │   │  · v1.4.0 관리      │  │
+│  │  · 직업군 아키타입 매핑 │   │  · v1.5.0 관리      │  │
 │  │  · 사용자 프로파일 참조  │   │  · Gemini 업데이트  │  │
 │  │  · 시스템 활성화 추천   │   │    호환 대응 안내   │  │
 │  └─────────────────────────┘   └─────────────────────┘  │
@@ -25,7 +25,7 @@
 │  │                Harness Scaffolder                 │  │
 │  │   · harness-100 베스트 프랙티스 템플릿 연동       │  │
 │  │   · 사용자 지정 프로젝트 루트 및 하위 구조 매핑     │  │
-│  │   · 배포 전 계획서 출력 및 유저 선 승인제 (v1.4.0)   │  │
+│  │   · 배포 전 계획서 출력 및 유저 선 승인제 (v1.5.0)   │  │
 │  │   · 네이티브 도구(write_to_file) 기반 자동 배포   │  │
 │  └───────────────────────────────────────────────────┘  │
 ├─────────────────────────────────────────────────────────┤
@@ -60,8 +60,8 @@
 │  · 6 Architectural Patterns:                            │
 │    Pipeline | Fan-out/Fan-in | Expert Pool              │
 │    Producer-Reviewer | Supervisor | Hierarchical        │
-│  · Agent Definition (.claude/agents/)                   │
-│  · Skill Generation (.claude/skills/)                   │
+│  · Agent Definition (.{platform}/agents/)               │
+│  · Skill Generation (.{platform}/skills/)               │
 │  · Orchestrator Templates                               │
 └─────────────────────────────────────────────────────────┘
 ```
@@ -97,7 +97,7 @@
 | 소스 → 타겟 | 연동 내용 |
 |------------|----------|
 | **Intent → harness-scaffolder** | 구조화된 Intent Object와 사용자 지정 프로젝트 루트 경로를 스캐폴더에 전달 |
-| **harness-scaffolder → User** | 파일 생성 전 "스캐폴딩 계획 보고서"를 띄우고 명시적 승인 확인 (v1.4.0) |
+| **harness-scaffolder → User** | 파일 생성 전 "스캐폴딩 계획 보고서"를 띄우고 명시적 승인 확인 (v1.5.0) |
 | **harness-scaffolder → L2/L3 Layers** | 에이전트에 EPR/REE 사전 경고 주입, 오케스트레이터에 ICIP/CRP/TCM/REE 감사/FGM 루프 주입 |
 | **Intent → ICIP/CRP/TCM/EPR/REE** | 시스템 활성화 결정 |
 | **ICIP → CRP** | 목적 앵커 경로를 checkpoint에 등록 |
@@ -119,9 +119,15 @@
 ├── _workspace/                      # 작업 디렉토리
 │   ├── 00_purpose_anchor.md         # ICIP: 목적 앵커 (불변)
 │   ├── 01_branch_map.md             # ICIP: 이시카와 분기 맵
+│   ├── R-005_foundry_ui_rule.md     # REE: 글로벌/프로젝트 레벨 강제 규칙 파일 1
+│   ├── R-006_ddfg_rule.md           # REE: 글로벌/프로젝트 레벨 강제 규칙 파일 2
+│   ├── R-007_attention_command.md   # REE: /attention 커맨드 규칙
+│   ├── R-008_health_check_command.md # REE: /health-check 커맨드 규칙
+│   ├── R-009_schema_sync_rule.md    # REE: 명세 갱신 시 JSON 스키마 동기화 MUST 규칙
 │   ├── checkpoint.json              # CRP: 체크포인트 메타데이터 (FGM 상태 내장)
 │   ├── checkpoint.json.bak          # CRP: 백업
 │   ├── goal_status.md               # FGM: 실시간 자율 실행 진행 상태 마크다운
+│   ├── goal_status.json             # FGM: 상태 메타데이터 JSON (CRP와 동기화)
 │   ├── 02_agent_A_result.md         # 에이전트 A 산출물
 │   ├── 02_agent_B_result.md         # 에이전트 B 산출물
 │   ├── 03_integrated_report.md      # 통합 산출물
