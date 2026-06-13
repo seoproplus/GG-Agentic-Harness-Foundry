@@ -55,7 +55,9 @@ flowchart TD
    - 사용자의 모호한 요청을 구조화된 형태(`Intent Object`)로 변환합니다.
    - 7개의 직업군 아키타입(Researcher, Developer, Planner 등)에 맞춰 최적의 하네스 구성을 제안합니다.
 2. **Harness Scaffolder (지능형 스캐폴더)**
-   - `harness-100` 베스트 프랙티스 템플릿과 연동하여 다중 플랫폼(`.gemini`, `.claude`)에 호환되는 에이전트 팀을 자동 배포합니다.
+   - 목표 도메인(예: "주식 분석")에 특화된 베스트 프랙티스 템플릿(`harness-100`)을 기반으로 에이전트 팀 폴더 트리를 즉시 생성(Scaffolding)합니다.
+   - 이때 6대 핵심 레이어(ICIP, CRP 등)가 에이전트 지침서(`SKILL.md`)에 강제로 믹스인(Mixin)됩니다.
+   - 임시 폴더에 생성이 완료되면, 터미널 스크립트(`deploy-harness.ps1`)를 통해 API 비용 소모 없이 전역/로컬 및 충돌 방어 배포를 대화형으로 수행합니다.
 
 ### Layer 3: Operational Runtime (런타임 실행 및 제어)
 3. **ICIP (Ishikawa Context Isolation Protocol)**
@@ -93,19 +95,15 @@ flowchart TD
 ### 1. 환경 구성
 Windows PowerShell 환경에서 제공된 설치 스크립트를 실행하여 파운드리를 대상 플랫폼(Gemini, Claude, OpenAI)에 배포합니다.
 
-- **전역(Global) 설치**: 내 PC의 모든 프로젝트에서 사용할 경우
-  ```powershell
-  .\install.ps1
-  ```
-- **로컬(Project) 설치**: 특정 프로젝트 폴더 내부에만 종속시켜 사용할 경우
-  ```powershell
-  .\install-local.ps1
-  ```
+1. 터미널(PowerShell)을 열고 현재 저장소 위치로 이동합니다.
+2. `./install-foundry.ps1` 스크립트를 실행합니다.
+   - 💬 **선택지**: 실행 시 **전역(Global)**에 설치할지, 특정 **로컬(Local) 프로젝트**에 설치할지 대화형으로 묻습니다. 사용자의 선택에 따라 설치 경로가 자동 지정됩니다.
+3. 기존 버전이 있다면 덮어쓸 것인지 백업할 것인지 확인하는 프롬프트가 표시됩니다.
 
 ### 1-1. 복구 및 롤백 (Rollback)
-설치 과정에서 덮어쓰기를 방지하기 위해 생성된 `백업본`으로 시스템을 원상복구할 수 있습니다. 롤백 시 현재 문제가 있는 설치본은 `_corrupted_...`로 안전하게 격리됩니다.
-- **전역 복구**: `.\restore.ps1`
-- **로컬 복구**: `.\restore-local.ps1`
+코드 훼손이나 오작동이 발생했을 경우, 이전 버전으로 원상 복구할 수 있습니다.
+- `./restore-foundry.ps1` 스크립트를 실행합니다.
+  - 전역/로컬 스코프를 지정하면 해당 환경의 백업 목록을 스캔하여 보여줍니다.
 
 ### 2. 버전 및 정보 확인
 현재 설치된 파운드리의 구성 사양과 버전(`v1.5.0`), Gemini 엔진 최적화 정보를 보려면 터미널에서 아래 스크립트를 실행합니다.

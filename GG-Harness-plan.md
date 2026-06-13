@@ -21,7 +21,7 @@
 
 ### Layer 4: User Interface
 - **Intent Engine (의도 분류 엔진)**: 사용자의 모호한 요청을 구조화(`Intent Object`)하고 7개 직업군 아키타입을 기반으로 시스템 활성화 매트릭스를 제안합니다.
-- **Harness Scaffolder (지능형 스캐폴더)**: `harness-100` 템플릿과 연동하여 대상 플랫폼에 최적화된 에이전트 폴더 트리를 자동 배포합니다.
+- **Harness Scaffolder (지능형 스캐폴더)**: `harness-100` 템플릿과 연동하여 대상 플랫폼에 최적화된 에이전트 폴더 트리를 임시 공간에 배포하고, `deploy-harness.ps1` 스크립트 실행을 통해 로컬/전역 무비용 배포를 완수합니다.
 
 ### Layer 3: Operational Runtime
 - **ICIP (Ishikawa Context Isolation Protocol)**: `00_purpose_anchor.md`를 불변 앵커로 삼아 목적 드리프트를 방지하고 서브 에이전트의 결과를 게이트 평가합니다.
@@ -42,7 +42,7 @@
 
 ### 1. 작업 스캐폴딩 (Initialization)
 1. Intent Engine이 의도와 아키타입(예: Researcher, Developer)을 분석.
-2. Harness Scaffolder가 다중 플랫폼 경로(`.gemini` 등)로 6대 런타임/거버넌스 시스템을 내장한 오케스트레이터 및 에이전트를 배포.
+2. Harness Scaffolder가 임시 경로(`_workspace/scaffolded_harness/...`)에 소스를 생성하고, `deploy-harness.ps1`을 통해 다중 플랫폼 경로(`.gemini` 등)로 안전한 배포 완수.
 
 ### 2. 자율 루프 실행 (Execution via FGM)
 1. 오케스트레이터가 `00_purpose_anchor.md`와 룰북(`R-*.md`)을 로드.

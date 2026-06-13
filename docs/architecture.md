@@ -96,8 +96,8 @@
 
 | 소스 → 타겟 | 연동 내용 |
 |------------|----------|
-| **intent-engine → harness-scaffolder** | 구조화된 Intent Object와 사용자 지정 프로젝트 루트 경로를 스캐폴더에 전달 |
-| **harness-scaffolder → User** | 파일 생성 전 "스캐폴딩 계획 보고서"를 띄우고 명시적 승인 확인 (v1.5.0) |
+| **intent-engine → harness-scaffolder** | 구조화된 Intent Object를 스캐폴더에 전달 (배포 경로는 스크립트가 처리) |
+| **harness-scaffolder → User** | 파일 생성 전 "스캐폴딩 계획 보고서"를 띄우고 승인을 구한 뒤, 임시 경로에 소스 생성 후 `deploy-harness.ps1` 실행 안내 |
 | **harness-scaffolder → L2/L3 Layers** | 에이전트에 EPR/REE 사전 경고 주입, 오케스트레이터에 ICIP/CRP/TCM/REE 감사/FGM 루프 주입 |
 | **intent-engine → ICIP/CRP/TCM/EPR/REE** | 시스템 활성화 결정 |
 | **ICIP → CRP** | 목적 앵커 경로를 checkpoint에 등록 |

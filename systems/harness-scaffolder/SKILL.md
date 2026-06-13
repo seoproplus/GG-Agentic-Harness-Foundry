@@ -14,19 +14,15 @@ description: "AI 기반 동적 하네스(에이전트+스킬) 생성 스킬. 사
 ### Phase 1: 의도 분석 및 루트 디렉토리 결정
 0. **[필수] 스캐폴딩 개선 가이드라인 로드**: 작업을 시작하기 전, 반드시 [harness-100-improvements.md](file:///c:/Users/themo/Documents/03_AI_WORKSPACE/GG-Agentic-OS-Harness/scratch/harness-100-improvements.md)를 읽고 여기에 누적 수록된 개선 지침(플랫폼 독립적 배포, 다자간 환류 루프 믹스인, 공백 경로 쿼트 처리)을 가져와 이번 스캐폴딩 구조 설계 시 강제 적용합니다.
 1. **의도 및 도메인 분석**: 사용자의 자연어 요청에서 핵심 도메인 키워드(예: "재고관리 웹앱" -> `webapp`, `database`, `api`)를 도출하고 `harness-100` 라이브러리에서 매칭할 폴더(예: `16-fullstack-webapp`)를 식별합니다.
-2. **프로젝트 루트 경로 식별**: 사용자가 요청에 포함한 **프로젝트 루트 경로**(예: `C:\Projects\MyScrapApp`)를 추출합니다. 경로가 주어지지 않았다면, 기본값으로 워크스페이스 하위에 사용자 의도에 맞는 프로젝트 폴더(`_workspace/{project-name}`)를 생성하도록 지정합니다.
-3. **베이스라인 정보 로드**: 매칭된 템플릿의 에이전트/스킬 정의 데이터를 로드합니다. (플랫폼 네임스페이스는 Step 4에서 결정되므로 이 단계에서 특정 플랫폼 경로를 참조하지 않습니다)
-4. **타겟 플랫폼 판별 및 네임스페이스 결정**: 사용자의 명시적 플랫폼 지시(예: "Claude용", "Gemini용", "ChatGPT용")를 판별하여 배포 대상 네임스페이스 폴더와 메타데이터 파일명을 다음과 같이 동적 매핑합니다.
-   - **Claude**: `.claude/` 폴더 구성 및 `CLAUDE.md` 명세서 생성
-   - **Gemini**: `.gemini/` 폴더 구성 및 `GEMINI.md` 명세서 생성 (기본값)
-   - **ChatGPT / OpenAI**: `.openai/` 폴더 구성 및 `OPENAI.md` 명세서 생성
+2. **임시 생성 경로(Staging Area) 지정**: 에이전트는 타겟 플랫폼이나 로컬/전역 여부를 사용자에게 묻지 **않습니다**. 대신, 무조건 워크스페이스 하위의 `_workspace/scaffolded_harness/{domain}` 경로를 베이스라인 타겟 디렉토리로 지정합니다.
+3. **베이스라인 정보 로드**: 매칭된 템플릿의 에이전트/스킬 정의 데이터를 로드합니다.
 
 ### Phase 2: [필수] 스캐폴딩 계획서 제안 및 사용자 승인
 * **계획서 출력**: 파일 생성 작업(`write_to_file`)을 수행하기 전에, **반드시 아래 양식의 "스캐폴딩 계획 보고서"를 작성하여 사용자에게 보여주고 승인을 구해야 합니다.** (참고: 스캐폴딩 뼈대 생성이나 중단 복구 등은 필수 승인을 받지만, 이후 작업 시 하위 에이전트 교대(ICIP), 상태 저장(CRP), 메모리 압축(TCM), 목표 반복 핑퐁(FGM) 등은 사용자 피로도 감소를 위해 시스템이 자동 전개합니다.)
   ```markdown
   ### 📋 GG-Agentic-Harness-Foundry 스캐폴딩 계획 보고서
   - **매칭 템플릿**: `harness-100` 하위의 `[매칭된 폴더명]`
-  - **배포 타겟 경로**: `[사용자 프로젝트 루트 경로 및 생성될 하위 폴더 구조]`
+  - **임시 스테이징 경로**: `_workspace/scaffolded_harness/{domain}`
   - **생성될 에이전트 목록**:
     - `agents/[에이전트A].md` - [역할 설명]
     - `agents/[에이전트B].md` - [역할 설명]
@@ -63,10 +59,13 @@ description: "AI 기반 동적 하네스(에이전트+스킬) 생성 스킬. 사
 4. **TCM Compaction 트리거**: 이터레이션 및 턴 횟수 누적에 따른 Soft(30%), Hard(50%) Compaction 기동.
 5. **CRP 체크포인트**: 각 루프/Phase 완료 시 상태 메타데이터를 `checkpoint.json`에 영구 기록.
 
-### Phase 5: 타겟 배포 (Target Deployment)
-- 결정된 플랫폼의 하네스 폴더(`.gemini/` 또는 `.claude/` 또는 `.openai/`)를 생성하고 고도화된 하네스 소스 코드를 지정된 **사용자 프로젝트 루트 디렉토리** 하위에 기록합니다.
-- **배포 툴 원칙**: terminal command(`run_command`, `mkdir`, `echo` 등)를 실행하면 사용자에게 개별 권한 승인을 묻게 되므로, **절대 run_command를 쓰지 말고, 네이티브 도구인 `write_to_file`만을 사용하여 지정된 루트 폴더와 파일들을 백그라운드에서 직접 생성**하십시오.
-- **Initial Git Snapshot**: 파일 배포가 완전히 끝난 직후, 백그라운드 명령어(run_command)를 호출하여 해당 루트 디렉토리에서 `git init`, `git add .`, `git commit -m "Initial Scaffolding Commit"`을 강제 수행합니다. 이는 CRP의 복구 시스템이 동작하기 위한 초기 베이스라인입니다.
+### Phase 5: 소스 코드 일괄 생성 및 배포 안내
+- 네이티브 도구인 `write_to_file`만을 사용하여 지정된 임시 스테이징 경로(`_workspace/scaffolded_harness/{domain}`)에 하네스 소스 코드 파일들을 일괄 생성합니다.
+- **배포 안내**: 소스 생성 완료 후 사용자에게 **스크립트 실행 가이드**를 안내합니다. 로컬/전역 지정 및 충돌 회피 등의 인터랙티브 작업은 LLM 비용 최소화를 위해 모두 이 스크립트가 처리합니다.
+  - 💬 안내 문구 예시: *"하네스 소스 생성이 완료되었습니다. 터미널에서 아래 명령어를 실행하여 대화형으로 설치를 마무리해 주세요."*
+  - ```powershell
+    .\deploy-harness.ps1 -SourceDir "_workspace\scaffolded_harness\{domain}"
+    ```
 
 ---
 
