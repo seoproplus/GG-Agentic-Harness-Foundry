@@ -95,7 +95,7 @@ description: "AI 기반 동적 하네스(에이전트+스킬) 생성 스킬. 사
 4. 배포 완료 내용과 구동 명령어 가이드를 사용자에게 깔끔하게 브리핑하십시오.
 
 ## Agent-First CLI Synergy: SDLC Commands & Expert Personas
-Addy Osmani의 `agent-skills` 원칙에 따라, 스캐폴딩 생성 시 제너럴한 에이전트 대신 **단계별 특화 페르소나**와 **표준화된 SDLC 커맨드**를 기본 내장하여 배포한다.
+Justin Poehnelt의 'Ship Agent Skills' 원칙에 따라, 스캐폴딩 생성 시 제너럴한 에이전트 대신 **단계별 특화 페르소나**와 **표준화된 SDLC 커맨드**를 기본 내장하여 배포한다.
 
 ### SDLC 7대 슬래시 커맨드 프리셋
 스캐폴딩되는 오케스트레이터는 소프트웨어 개발 생명주기를 커버하는 7가지 핵심 트리거 명령어(`/spec`, `/plan`, `/build`, `/test`, `/review`, `/code-simplify`, `/ship`)를 네이티브 수준으로 인식하도록 초기 설계된다.

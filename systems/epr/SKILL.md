@@ -166,7 +166,7 @@ description: "Error Pattern Registry — 반복 오류 방지 시스템. 작업 
 - 패턴 간 충돌 (A의 올바른 접근이 B의 잘못된 접근인 경우): 적용 범위를 세분화하여 분리
 
 ## Agent-First CLI Synergy: Anti-Rationalization (합리화 방지)
-Addy Osmani의 `agent-skills` 원칙에 따라, EPR은 단순한 코드 레벨의 오류(Bug)뿐만 아니라 **에이전트의 워크플로우 회피 및 변명(Rationalization)** 패턴을 사전에 차단하는 레지스트리 역할도 수행한다.
+Justin Poehnelt의 'Agent DX 최적화' 원칙에 따라, EPR은 단순한 코드 레벨의 오류(Bug)뿐만 아니라 **에이전트의 워크플로우 회피 및 변명(Rationalization)** 패턴을 사전에 차단하는 레지스트리 역할도 수행한다.
 
 ### 합리화 방지 논리 등록
 에이전트가 단계를 건너뛰기 위해 흔히 사용하는 변명(예: "이 코드는 너무 간단해서 테스트가 불필요하다", "보안 리뷰는 배포 직전에 하겠다")을 패턴화하여 등록하고, 이에 대한 **사전 반박 논리(Rebuttal)**를 함께 저장한다.

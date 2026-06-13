@@ -192,11 +192,11 @@ Main 컨텍스트의 목적을 보존하면서 하위 작업을 병렬로 위임
 - 모든 분기가 목적에서 이탈할 때: 목적 앵커 자체를 사용자에게 재확인 요청
 
 ## Agent-First CLI Synergy: JSON Payload & Defense-in-depth
-Addy Osmani의 에이전트 설계 원칙에 따라, ICIP 게이트 통과 요건은 자연어 프롬프팅에서 **엄격한 스키마 검증(Defense-in-depth)**으로 격상된다.
+Justin Poehnelt의 'Input Hardening Against Hallucinations(환각 방어)' 원칙에 따라, ICIP 게이트 통과 요건은 자연어 프롬프팅에서 **엄격한 스키마 검증(Defense-in-depth)**으로 격상된다.
 
 ### JSON 페이로드 위임
 Main 오케스트레이터가 서브에이전트에게 작업을 위임할 때, 단순 줄글이 아닌 기계 판독 가능한 JSON(`--json` 형태)으로 `목표, 제약사항, 반환 스키마`를 전달하여 추론의 모호성을 제거한다.
 
 ### 산출물 강제 검증 (Validation) 및 증거 데이터(Non-Negotiable Evidence) 필수화
 서브에이전트는 결과를 마크다운뿐만 아니라 구조화된 JSON 메타데이터(예: 성공 여부, 기여도 점수, 추출된 핵심 지표 등)로 함께 반환해야 한다. 
-특히, Addy Osmani의 "검증은 협상 불가" 원칙에 따라 ICIP 게이트 통과를 위해 `"verification_evidence"`(증거 데이터) 페이로드가 반드시 포함되어야 한다. 이 필드에 실제 런타임 로그, 빌드 성공 메시지, 테스트 커버리지 수치 등 기계적 증거가 없으면, 내용이 훌륭해도 ICIP는 가차 없이 Reject(기각)하고 재작업을 지시한다.
+특히, Justin Poehnelt의 "에이전트는 신뢰할 수 없는 오퍼레이터다" 원칙에 따라 ICIP 게이트 통과를 위해 "verification_evidence"(증거 데이터) 페이로드가 반드시 포함되어야 한다. 이 필드에 실제 런타임 로그, 빌드 성공 메시지, 테스트 커버리지 수치 등 기계적 증거가 없으면, 내용이 훌륭해도 ICIP는 가차 없이 Reject(기각)하고 재작업을 지시한다.

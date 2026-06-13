@@ -166,7 +166,7 @@ Compaction 시 LLM이 "무엇을 남기고 무엇을 버릴지" 판단하면 **�
 - archive 파일이 손상/누락된 경우: checkpoint.json의 summary로 대체 (품질 저하 수용)
 
 ## Agent-First CLI Synergy: Field Masking & Progressive Disclosure (점진적 공개)
-Addy Osmani의 에이전트 설계 원칙에 따라, TCM은 정적 파일 텍스트를 무비판적으로 전체 로드하는 것을 지양하고, **동적 스키마 조회 및 Field Masking**을 통해 필요한 JSON 필드나 특정 메타데이터만 로드하여 토큰을 방어한다.
+Justin Poehnelt의 'Context Window Discipline(컨텍스트 윈도우 방어)' 원칙에 따라, TCM은 정적 파일 텍스트를 무비판적으로 전체 로드하는 것을 지양하고, **동적 스키마 조회 및 Field Masking**을 통해 필요한 JSON 필드나 특정 메타데이터만 로드하여 토큰을 방어한다.
 
 ### 점진적 공개 원칙에 따른 Cold Context 설계
 스킬 명세서(`SKILL.md`)만 Hot Context(Tier 1)에 상주시키고, 방대한 체크리스트(예: `security-checklist.md`, `testing-patterns.md`)는 기본적으로 완전히 배제된 Cold Context(Tier 3)로 취급한다. 에이전트가 특정 검증 단계에 돌입했을 때만 `tcm_query`나 Field Masking을 통해 해당 파일의 필요 섹션만 핀포인트로 당겨오게 만들어, 토큰 사용량을 극단적으로 최적화한다.

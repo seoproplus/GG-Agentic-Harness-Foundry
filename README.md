@@ -122,3 +122,11 @@ python ./systems/foundry-info/foundry_info.py
 
 ---
 *GG-Agentic-Harness-Foundry — Empowering AI with Memory, Rules, and Unattended Execution.*
+
+## 💡 Acknowledgements & Design Inspiration
+이 파운드리의 아키텍처 및 주요 에이전트 인터페이스 철학은 **Justin Poehnelt**의 기사 ["You Need to Rewrite Your CLI for AI Agents"](https://justin.poehnelt.com/posts/rewrite-your-cli-for-ai-agents/)에서 깊은 영감을 받아 설계되었습니다.
+
+- **Schema Introspection (REE)**: 정적 문서 대신 CLI가 스스로 스키마를 반환하여 에이전트가 런타임에 읽어오게 하는 패턴.
+- **Context Window Discipline (TCM)**: Field Masking 등 컨텍스트 윈도우 한계를 엄격하게 통제.
+- **Input Hardening (ICIP)**: 환각 방어를 위한 엄격한 제약 및 샌드박싱 모델링.
+- **Ship Agent Skills (Scaffolder & Intent-Engine)**: 단순한 명령어가 아닌, 의도와 맥락을 내포한 `SKILL.md` 포맷 기반의 에이전트 지식 패키징.

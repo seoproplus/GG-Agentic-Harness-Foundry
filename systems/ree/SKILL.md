@@ -234,7 +234,7 @@ EPR에서 3회 이상 발생한 안정 패턴
 - 모든 MUST 규칙 위반 + 수정 불가: 사용자에게 에스컬레이션
 
 ## Agent-First CLI Synergy: Introspectable Schema
-Addy Osmani의 에이전트 설계 원칙에 따라, REE는 정적 규칙 마크다운을 무조건 프롬프트에 구겨 넣는 방식(Human DX)에서 벗어나, 에이전트가 런타임에 직접 스키마를 질의할 수 있는 **동적 조회 엔진(Agent DX)**으로 고도화된다.
+Justin Poehnelt의 'Schema Introspection Replaces Documentation(스키마 자동 조회)' 원칙에 따라, REE는 정적 규칙 마크다운을 무조건 프롬프트에 구겨 넣는 방식(Human DX)에서 벗어나, 에이전트가 런타임에 직접 스키마를 질의할 수 있는 **동적 조회 엔진(Agent DX)**으로 고도화된다.
 
 ### 동적 스키마 조회 (Introspection)
 - **명령어 기반 질의**: 에이전트는 작업 착수 전 `ree query --task="frontend" --output=json` 형태로 필요한 도메인 규칙만 질의할 수 있다.
